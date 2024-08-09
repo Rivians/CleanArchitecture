@@ -1,6 +1,8 @@
+using CleanArchitecture.Application.Behaviours;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Services;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddScoped<ICarService, CarService>(); // ICarService'den instance üretmeye çalýstýgýmýzda CarService instance'si türet demiþ oluyoruz.
+
+builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.AssemblyReference).Assembly);
 
 string connectionString = builder.Configuration.GetConnectionString("SqlServer");
 
@@ -17,8 +21,9 @@ builder.Services.AddControllers()
     .AddApplicationPart(typeof(
     CleanArchitecture.Presentation.AssemblyReference).Assembly); // mevcut uygulamama, baþka bir katmanda controllerlarýn devam edebileceðini söyledik.   
 
-builder.Services.AddMediatR(cfr =>
-    cfr.RegisterServicesFromAssembly(typeof(CleanArchitecture.Application.AssemblyReference).Assembly));
+builder.Services.AddMediatR(cfr => cfr.RegisterServicesFromAssembly(typeof(CleanArchitecture.Application.AssemblyReference).Assembly));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
