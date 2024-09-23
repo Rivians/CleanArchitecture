@@ -1,9 +1,12 @@
 using CleanArchitecture.Application.Behaviours;
 using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Persistance.Context;
+using CleanArchitecture.Persistance.Repositories;
 using CleanArchitecture.Persistance.Services;
 using CleanArchitecture.WebApi.Middleware;
 using FluentValidation;
+using GenericRepository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICarService, CarService>(); // ICarService'den instance üretmeye çalýstýgýmýzda CarService instance'si türet demiþ oluyoruz.
 builder.Services.AddTransient<ExceptionMiddleware>();
+
+builder.Services.AddScoped<IUnitOfWork>(cfr => cfr.GetRequiredService<AppDbContext>());
+
+builder.Services.AddScoped<ICarRepository, CarRepository>();
 
 builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.AssemblyReference).Assembly);
 

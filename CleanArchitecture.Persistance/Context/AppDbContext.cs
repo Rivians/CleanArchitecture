@@ -1,10 +1,11 @@
 ﻿using CleanArchitecture.Domain.Abstraction;
+using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CleanArchitecture.Persistance.Context
 {
-    public sealed class AppDbContext : DbContext
+    public sealed class AppDbContext : DbContext, IUnitOfWork
     {
         // override yöntemi yerine bu yöntemi kullanıyoruz. Artısı ise ConnectionString'i appsettings.json dan ayarlıyoruz
         public AppDbContext(DbContextOptions options) : base(options)  
