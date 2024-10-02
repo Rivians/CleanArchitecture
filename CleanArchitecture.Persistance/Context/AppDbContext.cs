@@ -1,21 +1,34 @@
 ﻿using CleanArchitecture.Domain.Abstraction;
+using CleanArchitecture.Domain.Entities;
 using GenericRepository;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CleanArchitecture.Persistance.Context
 {
-    public sealed class AppDbContext : DbContext, IUnitOfWork
+    public sealed class AppDbContext : IdentityDbContext<AppUser, IdentityRole, string>, IUnitOfWork
     {
         // override yöntemi yerine bu yöntemi kullanıyoruz. Artısı ise ConnectionString'i appsettings.json dan ayarlıyoruz
-        public AppDbContext(DbContextOptions options) : base(options)  
+        public AppDbContext(DbContextOptions options) : base(options)
         {
         }
 
 
         // burada sadece 1 metot ile : 100 tane configuration da eklesem otomatik olarak benim dbContextim bu konflarını dbContextime bağlayacak.
         //  Bu ifade, belirtilen assembly'deki tüm entity yapılandırmalarını (IEntityTypeConfiguration<T> uygulamaları) otomatik olarak bulur ve uygular. Bu sayede, manuel olarak her bir entity için yapılandırma eklemek yerine, ilgili yapılandırmaların otomatik olarak bağlanması sağlanır. 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyReference).Assembly);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Ignore<IdentityUserLogin<string>>();
+            modelBuilder.Ignore<IdentityUserRole<string>>();
+            modelBuilder.Ignore<IdentityUserClaim<string>>();
+            modelBuilder.Ignore<IdentityUserToken<string>>();
+            modelBuilder.Ignore<IdentityRoleClaim<string>>();
+            modelBuilder.Ignore<IdentityRole<string>>();
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyReference).Assembly);
+        }
 
 
         // Entity Framework Core'da SaveChanges ve SaveChangesAsync metotlarını override etmek, veri kaydetme sürecine müdahale etmenize olanak tanır. Bu sayede, veritabanına veri kaydedilmeden önce veya kaydedildikten sonra özel işlemler gerçekleştirebilirsiniz.
@@ -24,12 +37,12 @@ namespace CleanArchitecture.Persistance.Context
             var entries = ChangeTracker.Entries<Entity>(); // Entity Framework Core tarafından izlenen tüm entity girişlerini alır.
             foreach (var entry in entries)
             {
-                if(entry.State == EntityState.Added)
+                if (entry.State == EntityState.Added)
                 {
                     entry.Property(p => p.CreatedDate).CurrentValue = DateTime.UtcNow;
                 }
 
-                if(entry.State == EntityState.Modified)
+                if (entry.State == EntityState.Modified)
                 {
                     entry.Property(p => p.UpdatedDate).CurrentValue = DateTime.UtcNow;
                 }
