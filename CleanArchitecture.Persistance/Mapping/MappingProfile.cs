@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Application.Features.AuthFeatures.Commands.Register;
 using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
 using CleanArchitecture.Domain.Entities;
 using System;
@@ -13,7 +14,8 @@ namespace CleanArchitecture.Persistance.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<CreateCarCommand, Car>().ReverseMap();  // createMap ile command'dan car türüne dönüsüm yaparken, aynı zamanda reverseMap ile de Car'dan Command'a dönüşüm yapabileceğimizi söyülüyoruz.
+            CreateMap<CreateCarCommand, Car>();  // createMap ile command'dan car türüne dönüsüm yaparken, aynı zamanda reverseMap ile de Car'dan Command'a dönüşüm yapabileceğimizi söyülüyoruz.
+            CreateMap<RegisterCommand, AppUser>();
         }
     }
 }
