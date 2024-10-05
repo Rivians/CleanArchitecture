@@ -7,6 +7,7 @@ using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Repositories;
 using CleanArchitecture.Persistance.Services;
 using CleanArchitecture.WebApi.Middleware;
+using CleanArchitecture.WebApi.OptionsSetup;
 using FluentValidation;
 using GenericRepository;
 using MediatR;
@@ -26,14 +27,17 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>  // identity'deki
     options.Password.RequireUppercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddScoped<ICarService, CarService>(); // ICarService'den instance üretmeye çalýstýgýmýzda CarService instance'si türet demiþ oluyoruz.
-builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddScoped<ICarService, CarService>(); 
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddScoped<IUnitOfWork>(cfr => cfr.GetRequiredService<AppDbContext>());
-
 builder.Services.AddScoped<ICarRepository, CarRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();  // ConfigureOptions<>, belirli ayarlarýn (konfigürasyonlarýn) merkezi bir noktadan uygulanmasýný saðlar.
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+builder.Services.AddAuthentication().AddJwtBearer();
 
 builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.AssemblyReference).Assembly);
 
