@@ -5,7 +5,7 @@ namespace CleanArchitecture.WebApi.OptionsSetup
 {
     public sealed class JwtOptionsSetup : IConfigureOptions<JwtOptions>
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;     // bu interface ile appsettings.json daki verilere erişebiliriz ve configüre edebiliriz.
         public JwtOptionsSetup(IConfiguration configuration)
         {
             _configuration = configuration;
