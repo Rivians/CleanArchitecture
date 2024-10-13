@@ -35,7 +35,7 @@ namespace CleanArchitecture.Infrastructure.Auhtentication
                 new Claim("NameLastName", user.UserName)
             };
 
-            DateTime expires = DateTime.UtcNow.AddHours(1); 
+            DateTime expires = DateTime.Now.AddHours(1); 
 
             JwtSecurityToken jwtSecurityToken = new(
                 issuer: _jwtOptions.Issuer,

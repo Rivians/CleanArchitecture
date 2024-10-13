@@ -1,7 +1,9 @@
+using CleanArchitecture.Application.Abstractions;
 using CleanArchitecture.Application.Behaviours;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
+using CleanArchitecture.Infrastructure.Auhtentication;
 using CleanArchitecture.Infrastructure.Services;
 using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Repositories;
@@ -34,6 +36,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddScoped<IUnitOfWork>(cfr => cfr.GetRequiredService<AppDbContext>());
 builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 builder.Services.ConfigureOptions<JwtOptionsSetup>();  // ConfigureOptions<>, belirli ayarlarýn (konfigürasyonlarýn) merkezi bir noktadan uygulanmasýný saðlar.
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
