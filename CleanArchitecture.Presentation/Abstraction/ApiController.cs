@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace CleanArchitecture.Presentation.Abstraction
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")] // auth şeması olarak JwtBearer' in şemasını kullancagımızı söyledik. bunu yazmazsak 401 yani unauthorize almamız gereken yerde 404 hatası alırız.
     public abstract class ApiController : ControllerBase
     {
         public readonly IMediator _mediator;

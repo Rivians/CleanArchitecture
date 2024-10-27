@@ -5,6 +5,7 @@ using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Dtos;
 using CleanArchitecture.Presentation.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace CleanArchitecture.Presentation.Controllers
         }
 
         [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterCommand request, CancellationToken cancellationToken)
         {
             MessageResponse response = await _mediator.Send(request,cancellationToken);
@@ -28,6 +30,7 @@ namespace CleanArchitecture.Presentation.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginCommand request, CancellationToken cancellationToken)
         {
             LoginCommandResponse response = await _mediator.Send(request, cancellationToken);

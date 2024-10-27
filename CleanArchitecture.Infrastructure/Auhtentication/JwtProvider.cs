@@ -1,18 +1,13 @@
 ﻿using CleanArchitecture.Application.Abstractions;
-using CleanArchitecture.Domain.Entities;
-using Microsoft.Extensions.Options;
-//using Microsoft.IdentityModel.JsonWebTokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
 using CleanArchitecture.Application.Features.AuthFeatures.Commands.Login;
+using CleanArchitecture.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CleanArchitecture.Infrastructure.Auhtentication
 {
